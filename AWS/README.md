@@ -26,12 +26,6 @@ npm run dev -- --host 127.0.0.1 --port 5173 --strictPort
 ```
 Open `http://localhost:5173` in your browser.
 
-`frontend/.env.development.local` sets `VITE_SERVER_REMOTE=N` and
-`VITE_SERVER_URL_LOCAL=http://localhost:3003` for local development.
-If you change the backend port, update this URL too and restart Vite.
-This override applies only to the development server. Production builds use
-the deployment settings in `frontend/.env`.
-
 If dependencies are missing, run `npm ci` in both `backend` and `frontend` first.
 Stop each server with Control+C in its terminal.
 
@@ -43,6 +37,7 @@ npm.cmd run build
 cd ..
 firebase.cmd deploy --only hosting
 ```
+
 
 ## Launch BackEnd on Google Cloud Run
 will deploy to something like https://smart-speech-coach-backend-xxxxx-uw.a.run.app    in general : https://YOUR-CLOUD-RUN-URL/api/health is a url you can invoke to see if running.
