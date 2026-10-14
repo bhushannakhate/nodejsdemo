@@ -1,0 +1,20 @@
+{
+  "name": "smart-speech-coach-backend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "latest",
+    "cors": "latest",
+    "dotenv": "latest",
+    "express": "latest"
+  },
+  "allowScripts": {
+    "@google/genai@2.10.0": true,
+    "protobufjs@7.6.4": true
+  }
+}
