@@ -42,6 +42,117 @@
   <input type="submit" value="Go"/>
 </form>
 
+<br/><br/><br/>
+<hr>
+
+<b>Part 2: New Customer Form using the REST/JSON API</b>
+<br/>
+<form id="apiCustomerForm">
+
+  Name: <input type="text" id="apiName" name="name" required> </input>
+  <br/>
+  Email: <input type="email" id="apiEmail" name="email" required> </input>
+  <br/>
+  <input type="submit" value="Go"/>
+</form>
+<pre id="apiResult" aria-live="polite"></pre>
+
+<br><br><br>
+<hr>
+
+<b>Form to test GET request using the REST/JSON API</b>
+<br/>
+<form id="apiGetNameForm">
+
+  Name: <input type="text" id="apiGetName" name="name" required> </input>
+  <br/>
+  <input type="submit" value="Go"/>
+</form>
+<pre id="apiGetResult" aria-live="polite"></pre>
+
+<br><br><br>
+<hr>
+
+<b>Form to test POST request using the REST/JSON API</b>
+<br/>
+<form id="apiPostNameForm">
+
+  Name: <input type="text" id="apiPostName" name="name" required> </input>
+  <br/>
+  <input type="submit" value="Go"/>
+</form>
+<pre id="apiPostResult" aria-live="polite"></pre>
+
+<script>
+  function showJsonResponse(result, status, data) {
+    result.textContent = JSON.stringify({ status: status, ...data }, null, 2);
+  }
+
+  async function readJsonResponse(response) {
+    const responseText = await response.text();
+
+    try {
+      return JSON.parse(responseText);
+    } catch (error) {
+      return {
+        error: 'The API returned an invalid JSON response.'
+      };
+    }
+  }
+
+  document.getElementById('apiCustomerForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const result = document.getElementById('apiResult');
+
+    try {
+      const response = await fetch('/api/customer', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          name: document.getElementById('apiName').value,
+          email: document.getElementById('apiEmail').value
+        })
+      });
+      const data = await readJsonResponse(response);
+      showJsonResponse(result, response.status, data);
+    } catch (error) {
+      showJsonResponse(result, 0, { error: error.message });
+    }
+  });
+
+  document.getElementById('apiGetNameForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const result = document.getElementById('apiGetResult');
+    const name = document.getElementById('apiGetName').value;
+
+    try {
+      const response = await fetch('/api/readNameAndRespond?name=' + encodeURIComponent(name));
+      const data = await readJsonResponse(response);
+      showJsonResponse(result, response.status, data);
+    } catch (error) {
+      showJsonResponse(result, 0, { error: error.message });
+    }
+  });
+
+  document.getElementById('apiPostNameForm').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const result = document.getElementById('apiPostResult');
+
+    try {
+      const response = await fetch('/api/readNameAndRespond', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: document.getElementById('apiPostName').value })
+      });
+      const data = await readJsonResponse(response);
+      showJsonResponse(result, response.status, data);
+    } catch (error) {
+      showJsonResponse(result, 0, { error: error.message });
+    }
+  });
+</script>
 
 
 </body>

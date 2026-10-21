@@ -75,4 +75,45 @@ router.post('/readCustomerInfoAndRespond', function(req, res, next) {
 
 });
 
+// Part B: REST API endpoint; the request and response use JSON.
+router.post('/api/customer', function(req, res) {
+  const name = req.body.name;
+  const email = req.body.email;
+
+  if (!name || !email) {
+    return res.status(400).json({ error: 'Name and email are required.' });
+  }
+
+  res.json({
+    message: 'Welcome ' + name,
+    email: email
+  });
+});
+
+// JSON counterpart for the original GET form.
+router.get('/api/readNameAndRespond', function(req, res) {
+  const name = req.query.name;
+
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required.' });
+  }
+
+  res.json({ message: 'hello ' + name });
+});
+
+// JSON counterpart for the original POST form.
+router.post('/api/readNameAndRespond', function(req, res) {
+  const name = req.body.name;
+
+  if (!name) {
+    return res.status(400).json({ error: 'Name is required.' });
+  }
+
+  res.json({ message: 'hello now ' + name });
+});
+
+router.all('/api/*', function(req, res) {
+  res.status(404).json({ error: 'API endpoint not found.' });
+});
+
 module.exports = router;

@@ -24,11 +24,18 @@ app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
+  if (req.path.indexOf('/api/') === 0) {
+    return res.status(404).json({ error: 'API endpoint not found.' });
+  }
   next(createError(404));
 });
 
 // error handler
 app.use(function(err, req, res, next) {
+  if (req.path.indexOf('/api/') === 0) {
+    return res.status(err.status || 500).json({ error: err.message || 'API request failed.' });
+  }
+
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
