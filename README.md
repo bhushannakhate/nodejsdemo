@@ -12,3 +12,13 @@ gcloud config set project subtle-task-508217-b2. We didn't include the .env file
 # Lab 3.4
 The deployment to AWS was largely the same. We needed to make and configure an Elastic Beanstalk environment with all of the information in our .env files. We then had to install the AWS EB CLI to be able to make changes and deploy simply using commands in Webstorm. We had to first initialize the backend for Beanstalk with this command eb init smart-speech-coach-backend --platform node.js --region us-west-2. We had to log into AWS from within the CLI and use CloudFront with our Elastic Beanstalk deployment to be able to use the Gemini API. Without it the app would time out. We simply added the links to the .env files and it worked. It was largely the same, but AWS has more options and menus to get lost in so deploying took a little bit more time. Very minimal changes needed to be made. Just edits to the .env files 
 
+# Deployment comparison
+| Category | Google Cloud Run | AWS Elastic Beanstalk |
+|---|---|---|
+| Deployment | `gcloud run deploy --source .` | `eb deploy` |
+| Application code | Node.js/Express backend | Same Node.js/Express backend |
+| Infrastructure | Managed serverless container service | Managed Node.js environment using AWS resources |
+| HTTPS | Provided by the Cloud Run service URL | Required CloudFront in front of the HTTP EB URL |
+| Backend URL | [Cloud Run HTTPS URL](https://subtle-task-508217-b2.web.app) | [Elastic Beanstalk URL or CloudFront HTTPS URL](https://subtle-task-508217-b2--aws-ypsdz1e5.web.app) |
+| Frontend | Firebase Hosting | Firebase Hosting |
+| Code changes | Backend and frontend fetch integration | Mainly deployment configuration and remote URL changes |
