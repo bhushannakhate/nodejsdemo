@@ -6,22 +6,23 @@ code in index.js rather than in the controllers directory --which is a better MV
 After hitting the Go button on the first form this is what the results will look like (notice it has read in the form data)
 
 # Lab 3.3
-We created the Google Cloud project `subtle-task-508217-b2` and configured the Google Cloud CLI for deployment from WebStorm.
-
-First, we authenticated and selected the project:
-
-
-gcloud auth login
-gcloud config set project subtle-task-508217-b2
-
-From the backend directory, we deployed the backend to Google Cloud Run:
-gcloud run deploy smart-speech-coach-backend --source . --region us-west1 --allow-unauthenticated --env-vars-file .env.cloudrun
-We retrieved the deployed service URL with:
-gcloud run services describe smart-speech-coach-backend --region us-west1 --format="value(status.url)"
-The frontend was then built and deployed to Firebase Hosting:
-cd frontend
-npm run build
-npx firebase-tools deploy --only hosting --project subtle-task-508217-b2
+### Deployment Process
+1. We created the Google Cloud project `subtle-task-508217-b2` and configured the Google Cloud CLI for deployment from WebStorm.
+2. We authenticated and selected the project:
+   ```bash
+   gcloud auth login
+   gcloud config set project subtle-task-508217-b2
+3. From the backend directory, we deployed the backend to Google Cloud Run:
+   ```bash
+   gcloud run deploy smart-speech-coach-backend --source . --region us-west1 --allow-unauthenticated --env-vars-file .env.cloudrun
+4. We retrieved the deployed service URL with:
+   ```bash
+   gcloud run services describe smart-speech-coach-backend --region us-west1 --format="value(status.url)"
+5. The frontend was then built and deployed to Firebase Hosting:
+   ```bash
+   cd frontend
+   npm run build
+   npx firebase-tools deploy --only hosting --project subtle-task-508217-b2
 
 # Lab 3.4
 The Lab 3.4 deployment reused the Node.js/Express backend from Lab 3.3. Only the deployment configuration and frontend API URL needed to be updated.
@@ -29,22 +30,32 @@ The Lab 3.4 deployment reused the Node.js/Express backend from Lab 3.3. Only the
 
 1. Configured AWS credentials using the AWS CLI.
 2. Initialized the backend for Elastic Beanstalk:
-
    ```bash
    eb init smart-speech-coach-backend --platform node.js --region us-west-2
 3. Selected the Elastic Beanstalk environment:
-  eb use smart-speech-coach-env
+   ```bash
+   eb use smart-speech-coach-env
 4. Added the required environment variables in the Elastic Beanstalk environment properties, including:
-    GEMINI_API_KEY
-    geminiAskAnythingModel
-    askAnythingPrompt
-    allowedOrigins
-  The Gemini API key was stored in AWS environment settings and was not committed to GitHub.  
-5. Added an .ebignore file to exclude node_modules, environment files, logs, and other unnecessary files.
-6. Deployed the backend:
-7. Added an AWS CloudFront distribution using the Elastic Beanstalk URL as its origin. The /api/* behavior was configured to support POST and OPTIONS requests, forward CORS headers, and disable API response caching.
-8. Updated the frontend remote API URL to use the CloudFront HTTPS URL.
-9. Rebuilt and redeployed the frontend to Firebase Hosting.
+   ```bash
+   GEMINI_API_KEY
+   geminiAskAnythingModel
+   askAnythingPrompt
+   allowedOrigins
+5. The Gemini API key was stored in AWS environment settings and was not committed to GitHub.
+
+6. Added an `.ebignore` file to exclude unnecessary files:
+
+   ```text
+   node_modules/
+   .env
+   .env.cloudrun
+   *.log
+7. Deployed the backend.
+   ```bash
+   eb deploy
+8. Added an AWS CloudFront distribution using the Elastic Beanstalk URL as its origin. The /api/* behavior was configured to support POST and OPTIONS requests, forward CORS headers, and disable API response caching.
+9. Updated the frontend remote API URL to use the CloudFront HTTPS URL.
+10. Rebuilt and redeployed the frontend to Firebase Hosting.
 
 # Deployment Comparison
 | Category | Google Cloud Run | AWS Elastic Beanstalk |
