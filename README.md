@@ -10,7 +10,7 @@ We created the Google Cloud project `subtle-task-508217-b2` and configured the G
 
 First, we authenticated and selected the project:
 
-```bash
+
 gcloud auth login
 gcloud config set project subtle-task-508217-b2
 
